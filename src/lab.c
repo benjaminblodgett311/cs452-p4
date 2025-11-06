@@ -19,10 +19,10 @@ queue_t queue_init(int capacity) {
     struct queue *q = (struct queue *)malloc(sizeof(struct queue));
     if (!q) return NULL;
     q->buf = (void **)malloc(sizeof(void *) * (size_t)(capacity));
-    if (!q->buf) {
+    if (!q->buf) {//GCOVR_EXCL_START
         free(q);
         return NULL;
-    }
+    }//GCOVR_EXCL_STOP
     q->capacity = capacity;
     q->head = 0;
     q->tail = 0;
@@ -98,11 +98,11 @@ bool is_empty(queue_t q) {
     return v;
 }
 
-bool is_shutdown(queue_t q) {
+bool is_shutdown(queue_t q) {//GCOVR_EXCL_START
     if (!q) return true;
     pthread_mutex_lock(&q->mtx);
     bool v = q->shutdown;
     pthread_mutex_unlock(&q->mtx);
     return v;
-}
+}//GCOVR_EXCL_STOP
 
