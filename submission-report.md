@@ -1,6 +1,6 @@
 # Submission Report
 
-- Submission generated at 11/06/2025 at 22:08:34
+- Submission generated at 11/07/2025 at 21:28:22
 
 - Machine info: Linux runnervmf2e7y 6.11.0-1018-azure #18~24.04.1-Ubuntu SMP Sat Jun 28 04:46:03 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
 
@@ -247,15 +247,19 @@ struct queue {
     pthread_cond_t not_empty;
 };
 
+/**
+ * @brief Initialize a bounded FIFO queue (capacity <= 0 becomes 1).
+ * AI Use: Written By AI
+ */
 queue_t queue_init(int capacity) {
     if (capacity <= 0) capacity = 1;
     struct queue *q = (struct queue *)malloc(sizeof(struct queue));
     if (!q) return NULL;
     q->buf = (void **)malloc(sizeof(void *) * (size_t)(capacity));
-    if (!q->buf) {//GCOVR_EXCL_START
+    if (!q->buf) { //GCOVR_EXCL_START
         free(q);
         return NULL;
-    }//GCOVR_EXCL_STOP
+    } //GCOVR_EXCL_STOP
     q->capacity = capacity;
     q->head = 0;
     q->tail = 0;
@@ -267,6 +271,10 @@ queue_t queue_init(int capacity) {
     return q;
 }
 
+/**
+ * @brief Destroy the queue, wake waiters, and free all resources.
+ * AI Use: Written By AI
+ */
 void queue_destroy(queue_t q) {
     if (!q) return;
     pthread_mutex_lock(&q->mtx);
@@ -281,6 +289,10 @@ void queue_destroy(queue_t q) {
     free(q);
 }
 
+/**
+ * @brief Enqueue one element; block if full until space or shutdown.
+ * AI Use: Written By AI
+ */
 void enqueue(queue_t q, void *data) {
     if (!q) return;
     pthread_mutex_lock(&q->mtx);
@@ -296,6 +308,10 @@ void enqueue(queue_t q, void *data) {
     pthread_mutex_unlock(&q->mtx);
 }
 
+/**
+ * @brief Dequeue one element; block if empty; return NULL on shutdown+empty.
+ * AI Use: Written By AI
+ */
 void *dequeue(queue_t q) {
     if (!q) return NULL;
     pthread_mutex_lock(&q->mtx);
@@ -314,6 +330,10 @@ void *dequeue(queue_t q) {
     return data;
 }
 
+/**
+ * @brief Set shutdown flag and wake all waiting threads.
+ * AI Use: Written By AI
+ */
 void queue_shutdown(queue_t q) {
     if (!q) return;
     pthread_mutex_lock(&q->mtx);
@@ -323,6 +343,10 @@ void queue_shutdown(queue_t q) {
     pthread_mutex_unlock(&q->mtx);
 }
 
+/**
+ * @brief Return true if the queue is empty at call time (NULL => true).
+ * AI Use: Written By AI
+ */
 bool is_empty(queue_t q) {
     if (!q) return true;
     pthread_mutex_lock(&q->mtx);
@@ -331,13 +355,17 @@ bool is_empty(queue_t q) {
     return v;
 }
 
-bool is_shutdown(queue_t q) {//GCOVR_EXCL_START
+/**
+ * @brief Return true if the queue is shutdown (NULL => true).
+ * AI Use: Written By AI
+ */
+bool is_shutdown(queue_t q) { //GCOVR_EXCL_START
     if (!q) return true;
     pthread_mutex_lock(&q->mtx);
     bool v = q->shutdown;
     pthread_mutex_unlock(&q->mtx);
     return v;
-}//GCOVR_EXCL_STOP
+} //GCOVR_EXCL_STOP
 
 
 ```
@@ -943,14 +971,14 @@ int main(void) {
 ```
 
 ## Scripts Files
-Report generated on 11/06/2025 at 22:08:37
+Report generated on 11/07/2025 at 21:28:25
 
 
 ---
 
 ## End of Report
 
-SHA-256 Hash of the report: 58901e250e09d61ec58ce5576d352359cbcb881997a50a937d885af5eaf8cba8
+SHA-256 Hash of the report: 3bc4ad76a719175a3f93828a91955b7b6bd2bd3585aff11200dadc5e90c71881
 
 Do not edit the generated report. Any changes will be reported as academic dishonesty
 
